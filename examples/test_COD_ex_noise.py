@@ -19,6 +19,7 @@ import scipy.fft as scifft
 
 #Info
 
+display = False
 L=400 #Domain size
 
 lambda_1=200 #Wavelength
@@ -174,6 +175,9 @@ alpha=pcod.travelling_index(v[:,n_mod])
 alpha_noisy=pcod.travelling_index(v_noisy[:,n_mod])
 print('Traveling Index C.O.D, clean :',alpha)
 print('Traveling Index C.O.D, noisy :',alpha_noisy)
+
+if display:
+    plt.show()
 
 
 ####################### GIF generation ############################

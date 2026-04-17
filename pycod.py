@@ -53,6 +53,13 @@ def comp_ortho_dec(h_mat):
     lamb = np.abs(np.real(lamb))  # to ensure that the result is real and positive
     Q_d = v.conj().T @ Z  #Projection
 
+    for i in range(n_space):
+       q=Q_d[i,:]
+       q_fixed = q.copy()
+       q_fixed[1::2] *= -1
+               
+       Q_d[i,:]=q_fixed
+
     return lamb, v, Q_d, max(lamb)
 
 
@@ -218,7 +225,7 @@ def fourier_COC(mat_coc,v,lamb,delta_t,plot=1):
     #Fourier transform
     
     fft_temp_mat=scifft.fft(mat_coc, axis=1)
-    f_axis=np.linspace(-1/(2*delta_t),1/(2*delta_t),nt)
+    f_axis=np.linspace(0,1/delta_t,nt)
     
     mat=np.abs(np.mean(fft_temp_mat,axis=0)) #(1,nt,1) -> (nt,1)
     

@@ -399,3 +399,47 @@ def make_superposed_profiles(
     plt.close(fig)
 
     print(f"Saved superposed profile plot to {out_path}")
+
+def compute_phase_velocity(list_x, s_form_re, s_form_im, omega):
+    """
+    Compute propagation velocity from COD spatial mode.
+
+    Parameters
+    ----------
+    list_x : array-like
+        Spatial positions (1D)
+    s_form_re : array-like
+        Real part of spatial mode φ(x)
+    s_form_im : array-like
+        Imaginary part of spatial mode φ(x)
+    omega : float, optional
+        Angular frequency (rad/s). If None, only wavenumber is returned.
+
+    Returns
+    -------
+    k_mean : float
+        Mean wavenumber
+    c_mean : float or None
+        Mean phase velocity (if omega provided)
+    theta : ndarray
+        Unwrapped phase
+    k_local : ndarray
+        Local wavenumber
+    """
+
+    x = np.array(list_x)
+    phi = np.array(s_form_re) + 1j * np.array(s_form_im)
+
+    # Phase
+    theta = np.unwrap(np.angle(phi))
+
+    # Local wavenumber (derivative)
+    k_local = np.gradient(theta, x)
+
+    # Robust average (avoid edges)
+    k_mean = np.abs(np.mean(k_local[1:-1]))
+    lambda_mean = 2*np.pi/k_mean
+
+    c_mean = omega / k_mean if np.abs(k_mean) > 1e-8 else np.nan
+
+    return k_mean, lambda_mean, c_mean, theta, k_local

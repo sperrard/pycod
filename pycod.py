@@ -431,7 +431,7 @@ def compute_phase_velocity(list_x, s_form_re, s_form_im, omega):
     phi = np.array(s_form_re) + 1j * np.array(s_form_im)
 
     # Phase
-    theta = np.unwrap(np.angle(phi))
+    theta = np.unwrap(np.angle(phi)) #to verify, always tricky
 
     # Local wavenumber (derivative)
     k_local = np.gradient(theta, x)
